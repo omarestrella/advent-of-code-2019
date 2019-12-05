@@ -1,4 +1,4 @@
-import { last, slice } from "ramda";
+import { slice } from "ramda";
 import input from "./inputs/2.txt";
 
 function getList() {
