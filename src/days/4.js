@@ -57,12 +57,39 @@ const meetsDoubleRestriction = number => {
   return pairs.length === 3 || pairs.length === 4 || pairs.length === 5;
 };
 
+const meetsStricterDoubleRestriction = number => {
+  const digits = number
+    .toString()
+    .split("")
+    .map(toNumbers);
+
+  let counter = 1;
+  let previous = digits[0];
+  for (let i = 1; i < digits.length; i++) {
+    const current = digits[i];
+    if (current === previous) {
+      counter++;
+    } else {
+      if (counter === 2) {
+        return true;
+      }
+      counter = 1;
+    }
+    previous = current;
+  }
+  return counter === 2;
+};
+
 export default function run() {
   const [low, high] = input.split("-").map(toNumbers);
   const numbers = R.range(low, high);
 
-  const matches = numbers.filter(isIncreasing).filter(meetsDoubleRestriction);
-  const secondMatches = matches.filter(R.identity);
+  const increasingNumbers = numbers.filter(isIncreasing);
+  const matches = increasingNumbers.filter(meetsDoubleRestriction);
+
+  const secondMatches = increasingNumbers.filter(
+    meetsStricterDoubleRestriction
+  );
 
   return [`Part 1: ${matches.length}`, `Part 2: ${secondMatches.length}`].join(
     "\n"
