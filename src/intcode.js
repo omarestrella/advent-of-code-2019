@@ -10,11 +10,12 @@ const POSITION_MODE = 0;
 const IMMEDIATE_MODE = 1;
 
 export class Computer {
-  constructor(instructions) {
+  constructor(instructions, input = 1) {
     this.output = [];
     this.input = [];
     this.pointer = 0;
     this.lastOpcode = null;
+    this.input = input;
 
     this.instructions = instructions;
   }
@@ -39,10 +40,9 @@ export class Computer {
       const operation = opcode === 1 ? R.add : R.multiply;
       let [arg1, arg2, location] = R.slice(
         pointer + 1,
-        pointer + 4
-      )(this.instructions);
-      // let arg1 = this.instructions[arg1Pos];
-      // let arg2 = this.instructions[arg2Pos];
+        pointer + 4,
+        this.instructions
+      );
       if (mode1 === POSITION_MODE) {
         arg1 = this.instructions[arg1];
       }
@@ -53,9 +53,8 @@ export class Computer {
 
       this.advancePointer(4);
     } else if (opcode === 3) {
-      const input = 1; // not sure yet...
       let arg1 = this.instructions[pointer + 1];
-      this.instructions[arg1] = input;
+      this.instructions[arg1] = this.input;
 
       this.advancePointer(2);
     } else if (opcode === 4) {
@@ -66,6 +65,48 @@ export class Computer {
       this.output.push(arg1);
 
       this.advancePointer(2);
+    } else if (opcode === 5 || opcode === 6) {
+      // jump if true/false
+      let [arg1, arg2] = R.slice(pointer + 1, pointer + 3, this.instructions);
+
+      if (mode1 === POSITION_MODE) {
+        arg1 = this.instructions[arg1];
+      }
+      if (mode2 === POSITION_MODE) {
+        arg2 = this.instructions[arg2];
+      }
+
+      const shouldJump = opcode === 5 ? arg1 !== 0 : arg1 === 0;
+      if (shouldJump) {
+        this.pointer = arg2;
+      } else {
+        this.advancePointer(3);
+      }
+    } else if (opcode === 7 || opcode === 8) {
+      // less than/equal to
+      let [arg1, arg2, arg3] = R.slice(
+        pointer + 1,
+        pointer + 4,
+        this.instructions
+      );
+
+      if (mode1 === POSITION_MODE) {
+        arg1 = this.instructions[arg1];
+      }
+      if (mode2 === POSITION_MODE) {
+        arg2 = this.instructions[arg2];
+      }
+      // if (mode3 === POSITION_MODE) {
+      //   arg3 = this.instructions[arg3];
+      // }
+
+      const shouldStore = opcode === 7 ? arg1 < arg2 : arg2 === arg1;
+      if (shouldStore) {
+        this.instructions[arg3] = 1;
+      } else {
+        this.instructions[arg3] = 0;
+      }
+      this.advancePointer(4);
     } else if (opcode === 99) {
       if (this.lastOpcode) {
         // We done!
@@ -82,6 +123,11 @@ export class Computer {
     }
 
     if (this.pointer === pointer) {
+      console.error({
+        code,
+        pointer: this.pointer,
+        computer: this
+      });
       throw new Error("You did not advance the pointer:", code);
     }
 

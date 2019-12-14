@@ -1,4 +1,5 @@
 import input from "./inputs/5.txt";
+import * as R from "ramda";
 import { Computer } from "../intcode";
 
 function getList() {
@@ -6,8 +7,12 @@ function getList() {
 }
 
 export default function run() {
-  const computer = new Computer(getList());
-  computer.run();
-  console.log(computer.output);
-  return "...";
+  const instructions = getList();
+  const computer1 = new Computer([...instructions], 1);
+  computer1.run();
+
+  const computer2 = new Computer(instructions, 5);
+  computer2.run();
+
+  return [R.last(computer1.output), R.last(computer2.output)].join("\n");
 }
