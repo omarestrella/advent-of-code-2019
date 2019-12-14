@@ -4,6 +4,7 @@ import day1 from "./days/1";
 import day2 from "./days/2";
 import day3 from "./days/3";
 import day4 from "./days/4";
+import day5 from "./days/5";
 
 function getSolution(day) {
   switch (day) {
@@ -15,6 +16,8 @@ function getSolution(day) {
       return day3();
     case 4:
       return day4();
+    case 5:
+      return day5();
     default:
       return "shrug...";
   }
@@ -26,4 +29,17 @@ async function run(day) {
   output.innerHTML = result.replace("\n", "<br />");
 }
 
-window.run = run;
+function setupButtons() {
+  const days = [1, 2, 3, 4, 5];
+  days.forEach(day => {
+    const button = document.createElement("button");
+    button.innerHTML = `Day ${day}`;
+    button.onclick = () => run(day);
+
+    const solutions = document.querySelector(".solutions");
+    solutions.append(button);
+    solutions.append(document.createElement("br"));
+  });
+}
+
+setupButtons();
