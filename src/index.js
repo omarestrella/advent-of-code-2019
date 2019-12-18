@@ -5,6 +5,7 @@ import day2 from "./days/2";
 import day3 from "./days/3";
 import day4 from "./days/4";
 import day5 from "./days/5";
+import day6 from "./days/6";
 
 function getSolution(day) {
   switch (day) {
@@ -18,6 +19,8 @@ function getSolution(day) {
       return day4();
     case 5:
       return day5();
+    case 6:
+      return day6();
     default:
       return "shrug...";
   }
@@ -30,7 +33,7 @@ async function run(day) {
 }
 
 function setupButtons() {
-  const days = [1, 2, 3, 4, 5];
+  const days = [1, 2, 3, 4, 5, 6];
   days.forEach(day => {
     const button = document.createElement("button");
     button.innerHTML = `Day ${day}`;
