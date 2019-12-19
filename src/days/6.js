@@ -1,5 +1,4 @@
 import input from "./inputs/6.txt";
-import * as R from "ramda";
 
 // eslint-disable-next-line no-unused-vars
 const TEST_INPUT = `COM)B
