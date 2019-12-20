@@ -32,7 +32,7 @@ function getSolution(day) {
 async function run(day) {
   const result = await getSolution(day);
   const output = document.querySelector(".output");
-  output.innerHTML = result.replace("\n", "<br />");
+  output.innerHTML = result.replace(/\n/g, "<br />");
 }
 
 function setupButtons() {
