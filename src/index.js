@@ -7,6 +7,7 @@ import day4 from "./days/4";
 import day5 from "./days/5";
 import day6 from "./days/6";
 import day8 from "./days/8";
+import day10 from "./days/10";
 
 function getSolution(day) {
   switch (day) {
@@ -24,6 +25,8 @@ function getSolution(day) {
       return day6();
     case 8:
       return day8();
+    case 10:
+      return day10();
     default:
       return "shrug...";
   }
