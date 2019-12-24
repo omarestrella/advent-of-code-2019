@@ -6,6 +6,7 @@ import day3 from "./days/3";
 import day4 from "./days/4";
 import day5 from "./days/5";
 import day6 from "./days/6";
+import day7 from "./days/7";
 import day8 from "./days/8";
 import day10 from "./days/10";
 
@@ -23,6 +24,8 @@ function getSolution(day) {
       return day5();
     case 6:
       return day6();
+    case 7:
+      return day7();
     case 8:
       return day8();
     case 10:

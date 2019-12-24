@@ -10,14 +10,16 @@ const POSITION_MODE = 0;
 const IMMEDIATE_MODE = 1;
 
 export class Computer {
-  constructor(instructions, input = 1) {
+  constructor(instructions, input = 1, phaseSetting = 0) {
     this.output = [];
-    this.input = [];
     this.pointer = 0;
     this.lastOpcode = null;
     this.input = input;
+    this.phaseSetting = phaseSetting;
 
-    this.instructions = instructions;
+    this.instructions = [...instructions];
+
+    this.useInput = false;
   }
 
   advancePointer(amount) {
@@ -26,6 +28,18 @@ export class Computer {
 
   halt() {
     this.pointer = this.instructions.length + 1;
+  }
+
+  getInput() {
+    if (this.useInput) {
+      return this.input;
+    }
+    this.useInput = true;
+    return this.phaseSetting;
+  }
+
+  getOutput() {
+    return this.output[this.output.length - 1];
   }
 
   processInstruction(code) {
@@ -54,7 +68,7 @@ export class Computer {
       this.advancePointer(4);
     } else if (opcode === 3) {
       let arg1 = this.instructions[pointer + 1];
-      this.instructions[arg1] = this.input;
+      this.instructions[arg1] = this.getInput();
 
       this.advancePointer(2);
     } else if (opcode === 4) {
